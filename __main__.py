@@ -73,6 +73,23 @@ def login_user(main_window):
 
 # Function to open the login window
 def open_login_window(main_window):
+    global login_window, username_entry, password_entry, shop_window, parts_window
+
+    login_window = tk.Toplevel()
+    login_window.title("Login")
+    login_window.geometry('300x200')
+
+    tk.Label(login_window, text="Username").pack(pady=5)
+    username_entry = tk.Entry(login_window)
+    username_entry.pack(pady=5)
+
+    tk.Label(login_window, text="Password").pack(pady=5)
+    password_entry = tk.Entry(login_window, show='*')
+    password_entry.pack(pady=5)
+
+    tk.Button(login_window, text="Login", command=lambda: login_user(main_window)).pack(pady=10)
+
+def open_login_window(main_window):
     global login_window, username_entry, password_entry
 
     login_window = tk.Toplevel()
@@ -93,23 +110,19 @@ def open_login_window(main_window):
 # Function to open the shop window
 def open_shop_window():
     shop_window = tk.Tk()  # Create a new main window for the shop
-    shop_window.title("Bike Shop - Available Bikes and parts")
+    shop_window.title("Bike Shop - Available bikes")
     shop_window.geometry("800x600")  # Adjust size to fit images
 
-    tk.Label(shop_window, text="Select a product to add to your basket:", font=("Helvetica", 16)).pack(pady=10)
-    tk.Label(shop_window, text="Bikes:", font=("Helvetica", 16)).pack(pady=10)
+    tk.Label(shop_window, text="Select shoes to add to your basket:", font=("Helvetica", 16)).pack(pady=10)
 
     # List of shoes with their details
     shoes = [
-        {"name": "Red bike", "price": 200, "image": "sneakers.jpg", "category": "bikes"},
-        {"name": "Blue bike", "price": 120, "image": "boots.jpg",  "category": "bikes"},
-        {"name": "Green bike", "price": 100, "image": "sandals.jpg", "category": "bikes"},
-    ]
-
-    bikeParts = [
-        {"name": "Red bike", "price": 50, "image": "loafers.jpg", "category": "bike parts"},
-        {"name": "Blue bike", "price": 40, "image": "heels.jpg", "category": "bike parts"},
-        {"name": "Green bike", "price": 30, "image": "flipflops.jpg", "category": "bike parts"},
+        {"name": "Sneakers", "price": 50, "image": "sneakers.jpg"},
+        {"name": "Boots", "price": 80, "image": "boots.jpg"},
+        {"name": "Sandals", "price": 30, "image": "sandals.jpg"},
+        {"name": "Heels", "price": 70, "image": "heels.jpg"},
+        {"name": "Loafers", "price": 60, "image": "loafers.jpg"},
+        {"name": "Flip-Flops", "price": 20, "image": "flipflops.jpg"}
     ]
 
     basket = []  # To hold items added to the basket
@@ -131,11 +144,7 @@ def open_shop_window():
 
         # Create a frame for each shoe and place it in a grid
         frame_shoe = tk.Frame(frame)
-        frame_shoe.grid(row=index // 1, column=index % 3, padx=10, pady=10)  # Arrange in a 3-column row
-        tk.Label(shop_window, text="Bike parts:", font=("Helvetica", 16)).pack(pady=10)
-        frame_bP = tk.Frame(frame)
-        frame_bikeParts.grid(row=index // 1, column= index % 3, padx=10, pady=10) # Arrange in a 3 column row
-
+        frame_shoe.grid(row=index // 3, column=index % 3, padx=10, pady=10)  # Arrange in a 3-column grid
 
         label = tk.Label(frame_shoe, image=photo)
         label.image = photo  # Keep a reference to avoid garbage collection
@@ -170,7 +179,6 @@ def view_basket(basket):
 # Function to complete purchase
 def complete_purchase(basket, basket_window, total_price):
     if total_price > 0:
-        messagebox.showinfo("Login", "Login Successful!")
         open_payment_window(basket)
     else:
         messagebox.showwarning("Basket", "You don't have anything in your basket")
